@@ -1,0 +1,71 @@
+{
+  "generate.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "Top 3 products by total revenue all-time",
+        "db_schema": "Categories: CategoryID (INTEGER), CategoryName (TEXT), Description (TEXT), Picture (BLOB)\nsqlite_sequence: name (), seq ()\nCustomerCustomerDemo: CustomerID (TEXT), CustomerTypeID (TEXT)\nCustomerDemographics: CustomerTypeID (TEXT), CustomerDesc (TEXT)\nCustomers: CustomerID (TEXT), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT)\nEmployees: EmployeeID (INTEGER), LastName (TEXT), FirstName (TEXT), Title (TEXT), TitleOfCourtesy (TEXT), BirthDate (DATE), HireDate (DATE), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), HomePhone (TEXT), Extension (TEXT), Photo (BLOB), Notes (TEXT), ReportsTo (INTEGER), PhotoPath (TEXT)\nEmployeeTerritories: EmployeeID (INTEGER), TerritoryID (TEXT)\nOrder Details: OrderID (INTEGER), ProductID (INTEGER), UnitPrice (NUMERIC), Quantity (INTEGER), Discount (REAL)\nOrders: OrderID (INTEGER), CustomerID (TEXT), EmployeeID (INTEGER), OrderDate (DATETIME), RequiredDate (DATETIME), ShippedDate (DATETIME), ShipVia (INTEGER), Freight (NUMERIC), ShipName (TEXT), ShipAddress (TEXT), ShipCity (TEXT), ShipRegion (TEXT), ShipPostalCode (TEXT), ShipCountry (TEXT)\nProducts: ProductID (INTEGER), ProductName (TEXT), SupplierID (INTEGER), CategoryID (INTEGER), QuantityPerUnit (TEXT), UnitPrice (NUMERIC), UnitsInStock (INTEGER), UnitsOnOrder (INTEGER), ReorderLevel (INTEGER), Discontinued (TEXT)\nRegions: RegionID (INTEGER), RegionDescription (TEXT)\nShippers: ShipperID (INTEGER), CompanyName (TEXT), Phone (TEXT)\nSuppliers: SupplierID (INTEGER), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT), HomePage (TEXT)\nTerritories: TerritoryID (TEXT), TerritoryDescription (TEXT), RegionID (INTEGER)",
+        "constraints": "Revenue = SUM(UnitPrice * Quantity * (1 - Discount))",
+        "sql": "SELECT p.ProductName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) as revenue FROM Products p JOIN \"Order Details\" od ON p.ProductID = od.ProductID GROUP BY p.ProductID, p.ProductName ORDER BY revenue DESC LIMIT 3"
+      },
+      {
+        "question": "Which category had highest quantity sold in June 1997?",
+        "db_schema": "Categories: CategoryID (INTEGER), CategoryName (TEXT), Description (TEXT), Picture (BLOB)\nsqlite_sequence: name (), seq ()\nCustomerCustomerDemo: CustomerID (TEXT), CustomerTypeID (TEXT)\nCustomerDemographics: CustomerTypeID (TEXT), CustomerDesc (TEXT)\nCustomers: CustomerID (TEXT), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT)\nEmployees: EmployeeID (INTEGER), LastName (TEXT), FirstName (TEXT), Title (TEXT), TitleOfCourtesy (TEXT), BirthDate (DATE), HireDate (DATE), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), HomePhone (TEXT), Extension (TEXT), Photo (BLOB), Notes (TEXT), ReportsTo (INTEGER), PhotoPath (TEXT)\nEmployeeTerritories: EmployeeID (INTEGER), TerritoryID (TEXT)\nOrder Details: OrderID (INTEGER), ProductID (INTEGER), UnitPrice (NUMERIC), Quantity (INTEGER), Discount (REAL)\nOrders: OrderID (INTEGER), CustomerID (TEXT), EmployeeID (INTEGER), OrderDate (DATETIME), RequiredDate (DATETIME), ShippedDate (DATETIME), ShipVia (INTEGER), Freight (NUMERIC), ShipName (TEXT), ShipAddress (TEXT), ShipCity (TEXT), ShipRegion (TEXT), ShipPostalCode (TEXT), ShipCountry (TEXT)\nProducts: ProductID (INTEGER), ProductName (TEXT), SupplierID (INTEGER), CategoryID (INTEGER), QuantityPerUnit (TEXT), UnitPrice (NUMERIC), UnitsInStock (INTEGER), UnitsOnOrder (INTEGER), ReorderLevel (INTEGER), Discontinued (TEXT)\nRegions: RegionID (INTEGER), RegionDescription (TEXT)\nShippers: ShipperID (INTEGER), CompanyName (TEXT), Phone (TEXT)\nSuppliers: SupplierID (INTEGER), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT), HomePage (TEXT)\nTerritories: TerritoryID (TEXT), TerritoryDescription (TEXT), RegionID (INTEGER)",
+        "constraints": "Dates: 1997-06-01 to 1997-06-30",
+        "sql": "SELECT c.CategoryName, SUM(od.Quantity) as total_qty FROM Categories c JOIN Products p ON c.CategoryID = p.CategoryID JOIN \"Order Details\" od ON p.ProductID = od.ProductID JOIN Orders o ON od.OrderID = o.OrderID WHERE o.OrderDate BETWEEN '1997-06-01' AND '1997-06-30' GROUP BY c.CategoryID, c.CategoryName ORDER BY total_qty DESC LIMIT 1"
+      },
+      {
+        "question": "Top customer by gross margin in 1997",
+        "db_schema": "Categories: CategoryID (INTEGER), CategoryName (TEXT), Description (TEXT), Picture (BLOB)\nsqlite_sequence: name (), seq ()\nCustomerCustomerDemo: CustomerID (TEXT), CustomerTypeID (TEXT)\nCustomerDemographics: CustomerTypeID (TEXT), CustomerDesc (TEXT)\nCustomers: CustomerID (TEXT), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT)\nEmployees: EmployeeID (INTEGER), LastName (TEXT), FirstName (TEXT), Title (TEXT), TitleOfCourtesy (TEXT), BirthDate (DATE), HireDate (DATE), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), HomePhone (TEXT), Extension (TEXT), Photo (BLOB), Notes (TEXT), ReportsTo (INTEGER), PhotoPath (TEXT)\nEmployeeTerritories: EmployeeID (INTEGER), TerritoryID (TEXT)\nOrder Details: OrderID (INTEGER), ProductID (INTEGER), UnitPrice (NUMERIC), Quantity (INTEGER), Discount (REAL)\nOrders: OrderID (INTEGER), CustomerID (TEXT), EmployeeID (INTEGER), OrderDate (DATETIME), RequiredDate (DATETIME), ShippedDate (DATETIME), ShipVia (INTEGER), Freight (NUMERIC), ShipName (TEXT), ShipAddress (TEXT), ShipCity (TEXT), ShipRegion (TEXT), ShipPostalCode (TEXT), ShipCountry (TEXT)\nProducts: ProductID (INTEGER), ProductName (TEXT), SupplierID (INTEGER), CategoryID (INTEGER), QuantityPerUnit (TEXT), UnitPrice (NUMERIC), UnitsInStock (INTEGER), UnitsOnOrder (INTEGER), ReorderLevel (INTEGER), Discontinued (TEXT)\nRegions: RegionID (INTEGER), RegionDescription (TEXT)\nShippers: ShipperID (INTEGER), CompanyName (TEXT), Phone (TEXT)\nSuppliers: SupplierID (INTEGER), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT), HomePage (TEXT)\nTerritories: TerritoryID (TEXT), TerritoryDescription (TEXT), RegionID (INTEGER)",
+        "constraints": "Gross Margin = SUM((UnitPrice - 0.7*UnitPrice) * Quantity * (1 - Discount)). Year: 1997",
+        "sql": "SELECT c.CompanyName as customer, SUM((od.UnitPrice - 0.7*od.UnitPrice) * od.Quantity * (1 - od.Discount)) as margin FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y', o.OrderDate) = '1997' GROUP BY c.CustomerID, c.CompanyName ORDER BY margin DESC LIMIT 1"
+      },
+      {
+        "question": "What was the Average Order Value in December 1997?",
+        "db_schema": "Categories: CategoryID (INTEGER), CategoryName (TEXT), Description (TEXT), Picture (BLOB)\nsqlite_sequence: name (), seq ()\nCustomerCustomerDemo: CustomerID (TEXT), CustomerTypeID (TEXT)\nCustomerDemographics: CustomerTypeID (TEXT), CustomerDesc (TEXT)\nCustomers: CustomerID (TEXT), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT)\nEmployees: EmployeeID (INTEGER), LastName (TEXT), FirstName (TEXT), Title (TEXT), TitleOfCourtesy (TEXT), BirthDate (DATE), HireDate (DATE), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), HomePhone (TEXT), Extension (TEXT), Photo (BLOB), Notes (TEXT), ReportsTo (INTEGER), PhotoPath (TEXT)\nEmployeeTerritories: EmployeeID (INTEGER), TerritoryID (TEXT)\nOrder Details: OrderID (INTEGER), ProductID (INTEGER), UnitPrice (NUMERIC), Quantity (INTEGER), Discount (REAL)\nOrders: OrderID (INTEGER), CustomerID (TEXT), EmployeeID (INTEGER), OrderDate (DATETIME), RequiredDate (DATETIME), ShippedDate (DATETIME), ShipVia (INTEGER), Freight (NUMERIC), ShipName (TEXT), ShipAddress (TEXT), ShipCity (TEXT), ShipRegion (TEXT), ShipPostalCode (TEXT), ShipCountry (TEXT)\nProducts: ProductID (INTEGER), ProductName (TEXT), SupplierID (INTEGER), CategoryID (INTEGER), QuantityPerUnit (TEXT), UnitPrice (NUMERIC), UnitsInStock (INTEGER), UnitsOnOrder (INTEGER), ReorderLevel (INTEGER), Discontinued (TEXT)\nRegions: RegionID (INTEGER), RegionDescription (TEXT)\nShippers: ShipperID (INTEGER), CompanyName (TEXT), Phone (TEXT)\nSuppliers: SupplierID (INTEGER), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT), HomePage (TEXT)\nTerritories: TerritoryID (TEXT), TerritoryDescription (TEXT), RegionID (INTEGER)",
+        "constraints": "AOV = SUM(UnitPrice * Quantity * (1 - Discount)) / COUNT(DISTINCT OrderID). Dates: 1997-12-01 to 1997-12-31",
+        "sql": "SELECT CAST(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS FLOAT) / COUNT(DISTINCT o.OrderID) as aov FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE o.OrderDate BETWEEN '1997-12-01' AND '1997-12-31'"
+      },
+      {
+        "question": "Total revenue from Beverages category in June 1997",
+        "db_schema": "Categories: CategoryID (INTEGER), CategoryName (TEXT), Description (TEXT), Picture (BLOB)\nsqlite_sequence: name (), seq ()\nCustomerCustomerDemo: CustomerID (TEXT), CustomerTypeID (TEXT)\nCustomerDemographics: CustomerTypeID (TEXT), CustomerDesc (TEXT)\nCustomers: CustomerID (TEXT), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT)\nEmployees: EmployeeID (INTEGER), LastName (TEXT), FirstName (TEXT), Title (TEXT), TitleOfCourtesy (TEXT), BirthDate (DATE), HireDate (DATE), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), HomePhone (TEXT), Extension (TEXT), Photo (BLOB), Notes (TEXT), ReportsTo (INTEGER), PhotoPath (TEXT)\nEmployeeTerritories: EmployeeID (INTEGER), TerritoryID (TEXT)\nOrder Details: OrderID (INTEGER), ProductID (INTEGER), UnitPrice (NUMERIC), Quantity (INTEGER), Discount (REAL)\nOrders: OrderID (INTEGER), CustomerID (TEXT), EmployeeID (INTEGER), OrderDate (DATETIME), RequiredDate (DATETIME), ShippedDate (DATETIME), ShipVia (INTEGER), Freight (NUMERIC), ShipName (TEXT), ShipAddress (TEXT), ShipCity (TEXT), ShipRegion (TEXT), ShipPostalCode (TEXT), ShipCountry (TEXT)\nProducts: ProductID (INTEGER), ProductName (TEXT), SupplierID (INTEGER), CategoryID (INTEGER), QuantityPerUnit (TEXT), UnitPrice (NUMERIC), UnitsInStock (INTEGER), UnitsOnOrder (INTEGER), ReorderLevel (INTEGER), Discontinued (TEXT)\nRegions: RegionID (INTEGER), RegionDescription (TEXT)\nShippers: ShipperID (INTEGER), CompanyName (TEXT), Phone (TEXT)\nSuppliers: SupplierID (INTEGER), CompanyName (TEXT), ContactName (TEXT), ContactTitle (TEXT), Address (TEXT), City (TEXT), Region (TEXT), PostalCode (TEXT), Country (TEXT), Phone (TEXT), Fax (TEXT), HomePage (TEXT)\nTerritories: TerritoryID (TEXT), TerritoryDescription (TEXT), RegionID (INTEGER)",
+        "constraints": "Dates: 1997-06-01 to 1997-06-30. Category: Beverages",
+        "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) as revenue FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories c ON p.CategoryID = c.CategoryID JOIN Orders o ON od.OrderID = o.OrderID WHERE c.CategoryName = 'Beverages' AND o.OrderDate BETWEEN '1997-06-01' AND '1997-06-30'"
+      }
+    ],
+    "signature": {
+      "instructions": "Generate SQLite query from natural language question and schema.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "Natural language question"
+        },
+        {
+          "prefix": "Schema:",
+          "description": "Database schema with table and column info"
+        },
+        {
+          "prefix": "Constraints:",
+          "description": "Extracted constraints like dates, categories, KPIs"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Sql:",
+          "description": "Valid SQLite query. Use exact table/column names from schema. No markdown."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.4",
+      "cloudpickle": "3.1"
+    }
+  }
+}

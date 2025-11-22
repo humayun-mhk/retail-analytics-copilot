@@ -1,0 +1,27 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+env/
+*.egg-info/
+
+# Environment variables - NEVER COMMIT THESE!
+.env
+*.env
+.env.backup
+
+# IDE
+.vscode/
+.idea/
+
+# Outputs (optional)
+outputs_*.jsonl
+
+# DSPy cache
+.dspy_cache/
+
+# OS
+.DS_Store
+EOF
